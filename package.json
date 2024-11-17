@@ -1,0 +1,33 @@
+{
+  "name": "dawn-bot",
+  "version": "1.2.6",
+  "description": "DAWN BOT - Telegram Bot for Account Management",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "dev": "nodemon main.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "node-telegram-bot-api": "^0.65.1",
+    "sqlite3": "^5.1.7",
+    "tunnel": "^0.0.6",
+    "https-proxy-agent": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "author": "ITBAARTS",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itbaarts/dawn"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "account-management",
+    "dawn"
+  ]
+}
