@@ -1,8 +1,19 @@
 // accounts.js
 module.exports = [
-    {
-      "email": "input your email here",
-      "token": "input your token here",
-      "appId": "undefined" //default undefined
-    }
+  {
+    "email": "email1@gmail.com",
+    "token": "token",
+    "appId": "undefined"
+  },
+  {
+    "email": "email2@gmail.com",
+    "token": "token",
+    "appId": "undefined"
+  },
+  {
+    "email": "email3@gmail.com",
+    "token": "token",
+    "appId": "undefined"
+  }
+  //add more account
 ];

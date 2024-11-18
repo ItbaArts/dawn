@@ -1,31 +1,40 @@
-const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
 const path = require('path');
+const sqlite3 = require('sqlite3');
 
-let db = null;
+const DB_PATH = path.join(__dirname, 'itbaarts_dev.db');
 
 const initDatabase = () => {
     return new Promise((resolve, reject) => {
         try {
-            if (!db) {
-                db = new sqlite3.Database(path.join(__dirname, 'itbaarts_dev.db'), (err) => {
-                    if (err) {
-                        console.error('❌ Error connecting to database:', err);
-                        reject(err);
-                        return;
-                    }
-                    console.log('✅ Connected to database successfully');
-                });
+            // Hapus database lama jika ada
+            if (fs.existsSync(DB_PATH)) {
+                console.log('🗑️ Menghapus database lama...');
+                fs.unlinkSync(DB_PATH);
+                console.log('✅ Database lama berhasil dihapus');
             }
 
+            // Buat koneksi database baru
+            db = new sqlite3.Database(DB_PATH, (err) => {
+                if (err) {
+                    console.error('❌ Error membuat database:', err);
+                    reject(err);
+                    return;
+                }
+                console.log('✅ Database baru berhasil dibuat');
+            });
+
+            // Set timezone untuk database
+            db.run("PRAGMA timezone = '+08:00'");
+
+            // Buat tabel-tabel yang diperlukan
             db.serialize(() => {
-                db.run(`CREATE TABLE IF NOT EXISTS points_backup AS SELECT * FROM points`);
-                
-                db.run(`DROP TABLE IF EXISTS points`);
-                
+                // Tabel accounts
                 db.run(`
-                    CREATE TABLE IF NOT EXISTS points (
+                    CREATE TABLE IF NOT EXISTS accounts (
                         email TEXT PRIMARY KEY,
                         token TEXT,
+                        appId TEXT,
                         initial_balance INTEGER DEFAULT 0,
                         current_balance INTEGER DEFAULT 0,
                         total_earned INTEGER DEFAULT 0,
@@ -34,24 +43,26 @@ const initDatabase = () => {
                     )
                 `);
 
-                db.run(`
-                    INSERT INTO points (email, token, initial_balance, current_balance, last_update)
-                    SELECT email, token, initial_balance, current_balance, last_update 
-                    FROM points_backup
-                `);
-
-                db.run(`DROP TABLE IF EXISTS points_backup`);
-
+                // Tabel script_status
                 db.run(`
                     CREATE TABLE IF NOT EXISTS script_status (
-                        id INTEGER PRIMARY KEY,
-                        start_time DATETIME,
-                        is_running BOOLEAN,
-                        total_balance INTEGER,
-                        last_update DATETIME
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        is_running BOOLEAN DEFAULT 1,
+                        start_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        last_update DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        total_balance INTEGER DEFAULT 0
                     )
                 `);
 
+                // Tabel user_language
+                db.run(`
+                    CREATE TABLE IF NOT EXISTS user_language (
+                        chat_id INTEGER PRIMARY KEY,
+                        language TEXT DEFAULT 'id'
+                    )
+                `);
+
+                // Tabel transactions
                 db.run(`
                     CREATE TABLE IF NOT EXISTS transactions (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -60,68 +71,52 @@ const initDatabase = () => {
                         amount INTEGER,
                         description TEXT,
                         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (email) REFERENCES points(email)
+                        FOREIGN KEY (email) REFERENCES accounts(email)
                     )
                 `);
 
-                db.run(`
-                    CREATE TABLE IF NOT EXISTS notification_settings (
-                        email TEXT PRIMARY KEY,
-                        balance_updates BOOLEAN DEFAULT 1,
-                        script_status BOOLEAN DEFAULT 1,
-                        FOREIGN KEY (email) REFERENCES points(email)
-                    )
-                `);
-
-                db.run(`
-                    CREATE TABLE IF NOT EXISTS user_language (
-                        chat_id TEXT PRIMARY KEY,
-                        language TEXT DEFAULT 'en'
-                    )
-                `, (err) => {
+                db.get('SELECT 1', (err) => {
                     if (err) reject(err);
-                    else resolve();
+                    else {
+                        console.log('✅ Tabel-tabel berhasil dibuat');
+                        resolve();
+                    }
                 });
             });
         } catch (error) {
-            console.error('❌ Error initializing database:', error);
+            console.error('❌ Error inisialisasi database:', error);
             reject(error);
         }
     });
 };
 
-const updatePoints = (email, token, initialBalance, currentBalance, totalEarned) => {
+const updatePoints = (email, currentPoints) => {
     return new Promise((resolve, reject) => {
-        const query = `
-            INSERT OR REPLACE INTO points 
-            (email, token, initial_balance, current_balance, total_earned, last_collect, last_update) 
-            VALUES (?, ?, ?, ?, ?, datetime('now', 'localtime'), datetime('now', 'localtime'))
-        `;
-        
-        db.run(query, [email, token, initialBalance, currentBalance, totalEarned], (err) => {
-            if (err) reject(err);
-            else resolve();
+        db.get('SELECT initial_balance FROM accounts WHERE email = ?', [email], (err, row) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            const initialBalance = parseFloat(row?.initial_balance) || 0;
+            const currentBalance = parseFloat(currentPoints) || 0;
+            const totalEarned = Math.max(0, currentBalance - initialBalance);
+
+            db.run(`
+                UPDATE accounts 
+                SET current_balance = ?,
+                    total_earned = ?,
+                    last_collect = datetime('now', 'localtime'),
+                    last_update = datetime('now', 'localtime')
+                WHERE email = ?
+            `, [currentBalance, totalEarned, email], (updateErr) => {
+                if (updateErr) reject(updateErr);
+                else resolve();
+            });
         });
     });
 };
 
-const getPoints = (email) => {
-    return new Promise((resolve, reject) => {
-        db.get('SELECT * FROM points WHERE email = ?', [email], (err, row) => {
-            if (err) reject(err);
-            else resolve(row);
-        });
-    });
-};
-
-const getAllPoints = async () => {
-    return new Promise((resolve, reject) => {
-        db.all('SELECT * FROM points', (err, rows) => {
-            if (err) reject(err);
-            else resolve(rows || []);
-        });
-    });
-};
 
 const getTransactionHistory = (limit = 10) => {
     return new Promise((resolve, reject) => {
@@ -235,16 +230,19 @@ const updateScriptStatus = (totalBalance) => {
         db.run(`
             INSERT OR REPLACE INTO script_status (
                 id, 
-                start_time, 
-                is_running, 
+                is_running,
                 total_balance, 
-                last_update
+                last_update,
+                start_time
             ) VALUES (
                 1, 
-                COALESCE((SELECT start_time FROM script_status WHERE id = 1), datetime('now')),
                 1,
                 ?,
-                datetime('now')
+                datetime('now', 'localtime'),
+                COALESCE(
+                    (SELECT start_time FROM script_status WHERE id = 1), 
+                    datetime('now', 'localtime')
+                )
             )
         `, [totalBalance], (err) => {
             if (err) reject(err);
@@ -255,26 +253,88 @@ const updateScriptStatus = (totalBalance) => {
 
 const getScriptStatus = () => {
     return new Promise((resolve, reject) => {
-        db.get('SELECT * FROM script_status WHERE id = 1', (err, row) => {
+        db.get(`
+            SELECT 
+                is_running,
+                start_time,
+                last_update,
+                total_balance,
+                ROUND(
+                    (julianday(datetime('now', 'localtime')) - julianday(start_time)) * 24 * 60
+                ) as uptime_minutes
+            FROM script_status 
+            WHERE id = 1
+        `, (err, row) => {
             if (err) reject(err);
-            else resolve(row);
+            else resolve(row || { 
+                is_running: 1, 
+                start_time: new Date().toISOString(),
+                last_update: new Date().toISOString(),
+                total_balance: 0,
+                uptime_minutes: 0
+            });
         });
     });
 };
 
-const addOrUpdateAccount = (email, token, appId) => {
+const addOrUpdateAccount = (email, token, appId, initialPoints) => {
     return new Promise((resolve, reject) => {
-        db.run(`
-            INSERT OR REPLACE INTO points (
+        const query = `
+            INSERT OR REPLACE INTO accounts (
                 email, 
                 token,
+                appId,
                 initial_balance,
                 current_balance,
+                total_earned,
+                last_collect,
                 last_update
-            ) VALUES (?, ?, 0, 0, datetime('now', 'localtime'))
-        `, [email, token], (err) => {
-            if (err) reject(err);
-            else resolve();
+            ) VALUES (?, ?, ?, ?, ?, ?, datetime('now', 'localtime'), datetime('now', 'localtime'))
+        `;
+        
+        const points = parseFloat(initialPoints) || 0;
+        
+        db.run(query, [
+            email,
+            token,
+            appId,
+            points,
+            points,
+            0,
+        ], (err) => {
+            if (err) {
+                console.error('Error adding/updating account:', err);
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+};
+
+const getAccountByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM accounts WHERE email = ?', [email], (err, row) => {
+            if (err) {
+                console.error('Error getting account:', err);
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+};
+
+const getAllAccounts = () => {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM accounts';
+        db.all(query, [], (err, rows) => {
+            if (err) {
+                console.error('Error getting accounts:', err);
+                reject(err);
+            } else {
+                resolve(rows || []);
+            }
         });
     });
 };
@@ -282,8 +342,7 @@ const addOrUpdateAccount = (email, token, appId) => {
 module.exports = {
     initDatabase,
     updatePoints,
-    getPoints,
-    getAllPoints,
+    getAllAccounts,
     getTransactionHistory,
     getTransactionHistoryByEmail,
     getNotificationSettings,
@@ -295,5 +354,7 @@ module.exports = {
     getAllChatIds,
     updateScriptStatus,
     getScriptStatus,
-    addOrUpdateAccount
+    addOrUpdateAccount,
+    getAccountByEmail,
+    getAllAccounts
 }; 

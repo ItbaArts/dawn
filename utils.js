@@ -11,8 +11,31 @@ const countdown = async (seconds) => {
     console.log('\n🔄 Memulai ulang...\n');
 };
 
+const formatDateTime = (date) => {
+    if (!date) return '-';
+    try {
+        return new Date(date).toLocaleString('id-ID', {
+            timeZone: 'Asia/Makassar',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        return '-';
+    }
+};
+
 const formatNumber = (number) => {
-    return new Intl.NumberFormat('id-ID').format(number);
+    if (!number || isNaN(number)) return '0';
+    return number.toLocaleString('id-ID', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    });
 };
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -20,6 +43,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 module.exports = {
     randomDelay,
     countdown,
+    formatDateTime,
     formatNumber,
     sleep
 }; 

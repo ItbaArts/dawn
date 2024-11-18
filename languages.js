@@ -1,519 +1,266 @@
 const translations = {
-    en: {
+    en: {  // English - Default
         welcome: `
-🤖 <b>Welcome to DAWN BOT</b> 🤖
+✨ <b>DAWN BOT DASHBOARD</b> ✨
 
-Please select an option below:`,
+Welcome to your automated points management system.
+Select an option below to continue:`,
         menuItems: {
-            accountInfo: "📊 Account Info - View your account details",
-            totalBalance: "💰 Total Balance - Check total balance",
-            scriptStatus: "✅ Script Status - View current script status",
-            notifications: "🔔 Notifications - Manage notifications",
-            history: "📅 Transaction History - View transactions",
-            language: "🌐 Language - Change language",
-            help: "ℹ️ Help - Get help and support",
-            about: "👤 About Me - Learn more about this bot"
+            accountInfo: "📊 Account Info - View account details",
+            totalBalance: "💰 Balance - Check total points",
+            language: "🌐 Language - Change bot language",
+            about: "ℹ️ About - Bot information"
         },
         buttons: {
             accountInfo: "📊 Account Info",
-            totalBalance: "💰 Total Balance",
-            scriptStatus: "✅ Script Status",
-            notifications: "🔔 Notifications",
-            history: "📅 History",
+            totalBalance: "💰 Balance",
             language: "🌐 Language",
-            help: "ℹ️ Help",
-            about: "👤 About",
-            back: "🔙 Back to Menu",
-            stats: "📈 Statistik",
-            settings: "⚙️ Pengaturan"
+            about: "ℹ️ About",
+            back: "← Back",
+            refresh: "🔄 Refresh"
         },
         accountInfo: {
-            title: "🌟 <b>DAWN ACCOUNT INFO</b> 🌟",
-            account: "Account",
+            title: "📊 Account Information",
             email: "Email",
             initialBalance: "Initial Balance",
             earnedBalance: "Earned Balance",
             totalEarned: "Total Earned",
-            totalBalance: "Total Balance",
-            lastCollect: "Last Collect",
+            totalBalance: "Current Balance",
+            lastCollect: "Last Collection",
             lastUpdate: "Last Update"
         },
         totalBalance: {
-            title: "💰 <b>Total Balance All Accounts</b>",
-            total: "Total",
+            title: "💰 <b>Portfolio Overview</b>",
+            total: "Total Balance",
+            earning: "Total Earning",
             points: "points",
-            update: "Update"
+            lastUpdate: "Last Update"
         },
-        scriptStatus: {
-            title: "🔄 <b>Script Status</b>",
-            time: "Time",
-            status: "Status",
-            active: "Active and Running",
-            stopped: "Stopped",
-            uptime: "Uptime",
-            days: "d",
-            hours: "h",
-            minutes: "m"
-        },
-        notifications: {
-            title: "🔔 <b>Notification Settings</b>",
-            balanceUpdates: "Balance Updates",
-            scriptStatus: "Script Status",
-            changeSettings: "To change these settings, please contact support."
-        },
-        transactionHistory: {
-            title: "📅 <b>Transaction History</b>",
-            email: "Email",
-            type: "Type",
-            amount: "Amount",
-            points: "points",
-            description: "Description",
-            noTransactions: "No transactions found",
-            date: "Date"
-        },
-        errors: {
-            general: "An error occurred. Please try again later.",
-            invalidCommand: "Invalid command",
-            notAvailable: "This feature is not available yet",
-            databaseError: "Database error occurred",
-            networkError: "Network error occurred"
-        },
-        help: `
-ℹ️ <b>DAWN BOT HELP CENTER</b> ℹ️
-━━━━━━━━━━━━━━━━━━━━
-
-<b>📌 AVAILABLE COMMANDS</b>
-• /start - Start bot and show main menu
-
-<b>🔍 MENU FEATURES</b>
-• 📊 <b>Account Info</b>
-  View detailed information for each account including:
-  - Account email
-  - Initial balance
-  - Earned balance
-  - Current total balance
-
-• 💰 <b>Total Balance</b>
-  Display total balance from all accounts
-
-• ✅ <b>Script Status</b>
-  View script status including:
-  - Active/inactive status
-  - Start time
-  - Running duration
-  - Last update
-
-• 🔔 <b>Notifications</b>
-  Manage notification settings for:
-  - Balance changes
-  - Script status updates
-
-• 📅 <b>Transaction History</b>
-  View transaction records including:
-  - Transaction time
-  - Transaction type
-  - Amount
-  - Description
-
-<b>💡 NEED HELP?</b>
-If you need further assistance:
-• Telegram: @itbaarts_dev
-
-━━━━━━━━━━━━━━━━━━━━
-<i>DAWN BOT v1.2.6</i>`,
+        languageMenu: "🌐 <b>Language Settings</b>\n\nSelect your preferred language:",
         about: `
-👤 <b>ABOUT DAWN BOT</b> 👤
+<b>DAWN BOT ${new Date().getFullYear()}</b>
 ━━━━━━━━━━━━━━━━━━━━
 
-<b>🤖 BOT INFORMATION</b>
-• Name: DAWN BOT
-• Version: 1.0.0
+<b>System Information</b>
+• Version: 1.2.6
 • Developer: ITBAARTS
 • Last Update: ${new Date().toLocaleDateString()}
 
-<b>🌟 FEATURES</b>
-• Real-time balance tracking
+<b>Core Features</b>
+• Real-time points tracking
 • Multi-account management
-• Automated script monitoring
-• Transaction history
-• Customizable notifications
-• Secure and reliable
+• Automated collection system
+• Secure & reliable operation
 
-<b>🛡️ SECURITY</b>
-• End-to-end encryption
-• Secure authentication
-• Regular security updates
-• Privacy protection
-
-<b>👨‍💻 DEVELOPER CONTACT</b>
-• Telegram: @itbaarts_dev
-
-<b>📢 SOCIAL MEDIA</b>
-• Telegram Channel: @UXScript
+<b>Support</b>
+• Developer: @itbaarts_dev
+• Updates: @UXScript & @UXPrime
 
 ━━━━━━━━━━━━━━━━━━━━
-<i>Developed with ❤️ by ITBAARTS</i>`,
-        languageMenu: "🌐 <b>Select Language</b>\n\nChoose your preferred language:",
-        stats: {
-            title: "📈 <b>Statistik Bot</b>",
-            totalAccounts: "Total Akun",
-            totalTransactions: "Total Transaksi",
-            averageEarnings: "Rata-rata Pendapatan",
-            topEarner: "Akun Terbaik",
-            lastHour: "1 Jam Terakhir",
-            today: "Hari Ini",
-            week: "Minggu Ini"
-        },
-        settings: {
-            title: "⚙️ <b>Pengaturan Bot</b>",
-            notifications: "Notifikasi",
-            language: "Bahasa",
-            timezone: "Zona Waktu",
-            display: "Tampilan",
-            security: "Keamanan",
-            advanced: "Lanjutan"
+<i>Engineered by ITBAARTS</i>`,
+        errors: {
+            accountInfo: "❌ Gagal mengambil informasi akun",
+            balance: "❌ Gagal mengambil informasi saldo",
+            noAccounts: "❌ Tidak ada akun yang terdaftar",
+            fetch: "❌ Gagal mengambil data"
         }
     },
-    id: {
+    id: {  // Indonesia
         welcome: `
-╔══════════════════╗
-║  🤖 DAWN BOT 🤖  ║
-╚══════════════════╝
+✨ <b>DASHBOARD DAWN BOT</b> ✨
 
-Selamat datang! Silakan pilih menu di bawah ini:`,
+Selamat datang di sistem manajemen poin otomatis Anda.
+Pilih menu di bawah untuk melanjutkan:`,
         menuItems: {
-            accountInfo: "📊 Account Info - View your account details",
-            totalBalance: "💰 Total Balance - Check total balance",
-            scriptStatus: "✅ Script Status - View current script status",
-            notifications: "🔔 Notifications - Manage notifications",
-            history: "📅 Transaction History - View transactions",
-            language: "🌐 Language - Change language",
-            help: "ℹ️ Help - Get help and support",
-            about: "👤 About Me - Learn more about this bot"
+            accountInfo: "📊 Info Akun - Lihat detail akun",
+            totalBalance: "💰 Saldo - Cek total poin",
+            language: "🌐 Bahasa - Ubah bahasa bot",
+            about: "ℹ️ Tentang - Informasi bot"
         },
         buttons: {
-            accountInfo: "📊 Account Info",
-            totalBalance: "💰 Total Balance",
-            scriptStatus: "✅ Script Status",
-            notifications: "🔔 Notifications",
-            history: "📅 History",
-            language: "🌐 Language",
-            help: "ℹ️ Help",
-            about: "👤 About",
-            back: "🔙 Back to Menu",
-            stats: "📈 Statistik",
-            settings: "⚙️ Pengaturan"
+            accountInfo: "📊 Info Akun",
+            totalBalance: "💰 Saldo",
+            language: "🌐 Bahasa",
+            about: "ℹ️ Tentang",
+            back: "← Kembali",
+            refresh: "🔄 Refresh"
         },
         accountInfo: {
             title: "📊 Informasi Akun",
-            account: "Akun",
             email: "Email",
             initialBalance: "Saldo Awal",
             earnedBalance: "Saldo Diperoleh",
-            totalEarned: "Total Pendapatan",
-            totalBalance: "Total Saldo",
-            lastCollect: "Terakhir Collect",
+            totalEarned: "Total Diperoleh",
+            totalBalance: "Saldo Saat Ini",
+            lastCollect: "Collect Terakhir",
             lastUpdate: "Update Terakhir"
         },
         totalBalance: {
-            title: "💰 <b>Total Saldo Semua Akun</b>",
-            total: "Total",
+            title: "💰 <b>Ringkasan Portfolio</b>",
+            total: "Total Saldo",
+            earning: "Total Pendapatan",
             points: "poin",
-            update: "Update"
-        },
-        scriptStatus: {
-            title: "⚡ Status Script",
-            time: "Waktu",
-            status: "Status",
-            active: "Aktif",
-            stopped: "Nonaktif",
-            uptime: "Waktu Aktif",
             lastUpdate: "Update Terakhir"
         },
-        notifications: {
-            title: "🔔 <b>Pengaturan Notifikasi</b>",
-            balanceUpdates: "Update Saldo",
-            scriptStatus: "Status Script",
-            changeSettings: "Untuk mengubah pengaturan ini, silakan hubungi support."
-        },
-        transactionHistory: {
-            title: "📅 <b>Riwayat Transaksi</b>",
-            email: "Email",
-            type: "Tipe",
-            amount: "Jumlah",
-            points: "poin",
-            description: "Deskripsi",
-            noTransactions: "Tidak ada transaksi ditemukan",
-            date: "Tanggal"
-        },
-        errors: {
-            general: "Terjadi kesalahan. Silakan coba lagi nanti.",
-            invalidCommand: "Perintah tidak valid",
-            notAvailable: "Fitur ini belum tersedia",
-            databaseError: "Terjadi kesalahan database",
-            networkError: "Terjadi kesalahan jaringan"
-        },
-        help: `
-ℹ️ <b>PUSAT BANTUAN DAWN BOT</b> ℹ️
-━━━━━━━━━━━━━━━━━━━━
-
-<b>📌 PERINTAH TERSEDIA</b>
-• /start - Mulai bot dan tampilkan menu utama
-
-<b>🔍 FITUR MENU</b>
-• 📊 <b>Account Info</b>
-  Lihat informasi detail untuk setiap akun:
-  - Email akun
-  - Saldo awal
-  - Saldo yang diperoleh
-  - Total saldo saat ini
-
-• 💰 <b>Total Saldo</b>
-  Tampilkan total saldo dari semua akun
-
-• ✅ <b>Status Script</b>
-  Lihat status script termasuk:
-  - Status aktif/nonaktif
-  - Waktu mulai
-  - Durasi berjalan
-  - Update terakhir
-
-• 🔔 <b>Notifikasi</b>
-  Kelola pengaturan notifikasi:
-  - Perubahan saldo
-  - Perubahan status script
-
-• 📅 <b>Riwayat Transaksi</b>
-  Lihat riwayat transaksi:
-  - Waktu transaksi
-  - Tipe transaksi
-  - Jumlah
-  - Deskripsi
-
-<b>💡 BUTUH BANTUAN?</b>
-Jika Anda membutuhkan bantuan:
-• Telegram: @itbaarts_dev
-
-━━━━━━━━━━━━━━━━━━━━
-<i>DAWN BOT v1.2.6</i>`,
+        languageMenu: "🌐 <b>Pengaturan Bahasa</b>\n\nPilih bahasa yang Anda inginkan:",
         about: `
-👤 <b>TENTANG DAWN BOT</b> 👤
+<b>DAWN BOT ${new Date().getFullYear()}</b>
 ━━━━━━━━━━━━━━━━━━━━
 
-<b>🤖 INFORMASI BOT</b>
-• Nama: DAWN BOT
-• Versi: 1.0.0
+<b>Informasi Sistem</b>
+• Versi: 1.2.6
 • Pengembang: ITBAARTS
 • Update Terakhir: ${new Date().toLocaleDateString()}
 
-<b>🌟 FITUR</b>
-• Pelacakan saldo real-time
+<b>Fitur Utama</b>
+• Pelacakan poin real-time
 • Manajemen multi-akun
-• Pemantauan script otomatis
-• Riwayat transaksi
-• Notifikasi yang dapat disesuaikan
-• Aman dan andal
+• Sistem collect otomatis
+• Operasi aman & andal
 
-<b>👨‍💻 KONTAK PENGEMBANG</b>
-• Telegram: @itbaarts_dev
-
-<b>📢 MEDIA SOSIAL</b>
-• Channel Telegram: @UXScript
+<b>Dukungan</b>
+• Pengembang: @itbaarts_dev
+• Pembaruan: @UXScript & @UXPrime
 
 ━━━━━━━━━━━━━━━━━━━━
-<i>Dikembangkan dengan ❤️ oleh ITBAARTS</i>`,
-        languageMenu: "🌐 <b>Pilih Bahasa</b>\n\nPilih bahasa yang Anda inginkan:",
-        stats: {
-            title: "📈 <b>Statistik Bot</b>",
-            totalAccounts: "Total Akun",
-            totalTransactions: "Total Transaksi",
-            averageEarnings: "Rata-rata Pendapatan",
-            topEarner: "Akun Terbaik",
-            lastHour: "1 Jam Terakhir",
-            today: "Hari Ini",
-            week: "Minggu Ini"
-        },
-        settings: {
-            title: "⚙️ <b>Pengaturan Bot</b>",
-            notifications: "Notifikasi",
-            language: "Bahasa",
-            timezone: "Zona Waktu",
-            display: "Tampilan",
-            security: "Keamanan",
-            advanced: "Lanjutan"
+<i>Dikembangkan oleh ITBAARTS</i>`,
+        errors: {
+            accountInfo: "❌ Gagal mengambil informasi akun",
+            balance: "❌ Gagal mengambil informasi saldo",
+            noAccounts: "❌ Tidak ada akun yang terdaftar",
+            fetch: "❌ Gagal mengambil data"
         }
     },
-    hi: {
+    bj: {  // Banjar
         welcome: `
-🤖 <b>DAWN BOT में आपका स्वागत है</b> 🤖
+✨ <b>DASHBOARD DAWN BOT</b> ✨
 
-कृपया नीचे दिए गए विकल्प चुनें:`,
+Assalamu'alaikum, salamat datang ka wadah manajemen poin otomatis Pian.
+Cuba pilih menu di bawah ni gasan manarusakan:`,
         menuItems: {
-            accountInfo: "📊 खाता जानकारी - अपने खाते का विवरण देखें",
-            totalBalance: "💰 कुल बैलेंस - कुल बैलेंस जांचें",
-            scriptStatus: "✅ स्क्रिप्ट स्थिति - वर्तमान स्क्रिप्ट स्थिति देखें",
-            notifications: "🔔 सूचनाएं - सूचनाएं प्रबंधित करें",
-            history: "📅 लेन-देन इतिहास - लेन-देन देखें",
-            language: "🌐 भाषा - भाषा बदलें",
-            help: "ℹ️ सहायता - सहायता प्राप्त करें",
-            about: "👤 परिचय - बॉट के बारे में और जानें"
+            accountInfo: "📊 Paparan Akun - Malihat rincian akun Pian",
+            totalBalance: "💰 Duit Pian - Mamariksa jumlah poin",
+            language: "🌐 Bahasa - Mangganti bahasa bot",
+            about: "ℹ️ Tentang - Paparan bot"
         },
         buttons: {
-            accountInfo: "📊 खाता जानकारी",
-            totalBalance: "💰 कुल बैलेंस",
-            scriptStatus: "✅ स्क्रिप्ट स्थिति",
-            notifications: "🔔 सूचनाएं",
-            history: "📅 इतिहास",
-            language: "🌐 भाषा",
-            help: "ℹ️ सहायता",
-            about: "👤 परिचय",
-            back: "🔙 मेनू पर वापस",
-            stats: "📈 स्टेटिक्स",
-            settings: "⚙️ सेटिंग्स"
+            accountInfo: "📊 Paparan Akun",
+            totalBalance: "💰 Duit Pian",
+            language: "🌐 Bahasa",
+            about: "ℹ️ Tentang",
+            back: "← Bulik Ka Awal",
+            refresh: "🔄 Refresh"
         },
         accountInfo: {
-            title: "🌟 <b>DAWN खाता जानकारी</b> 🌟",
-            account: "खाता",
-            email: "खाता",
-            initialBalance: "प्रारंभिक बैलेंस",
-            earnedBalance: "अर्जित बैलेंस",
-            totalEarned: "कुल अर्जित",
-            totalBalance: "कुल बैलेंस",
-            lastCollect: "अंतिम कलेक्ट",
-            lastUpdate: "अंतिम अपडेट"
+            title: "📊 Paparan Akun Pian",
+            email: "Alamat Surel",
+            initialBalance: "Duit Awal Pian",
+            earnedBalance: "Duit Nang Didapat",
+            totalEarned: "Jumlah Duit Didapat",
+            totalBalance: "Duit Pian Wayahini",
+            lastCollect: "Terakhir Kali Maambil",
+            lastUpdate: "Terakhir Diubah"
         },
         totalBalance: {
-            title: "💰 <b>सभी खातों का कुल बैलेंस</b>",
-            total: "कुल",
-            points: "पॉइंट्स",
-            update: "अपडेट"
+            title: "💰 <b>Catatan Duit Pian</b>",
+            total: "Jumlah Duit",
+            earning: "Jumlah Duit Didapat",
+            points: "poin",
+            lastUpdate: "Terakhir Diubah"
         },
-        scriptStatus: {
-            title: "🔄 <b>स्क्रिप्ट स्थिति</b>",
-            time: "समय",
-            status: "स्थिति",
-            active: "सक्रिय और चल रहा है",
-            stopped: "रुका हुआ",
-            uptime: "अपटाइम",
-            days: "दिन",
-            hours: "घंटे",
-            minutes: "मिनट"
-        },
-        notifications: {
-            title: "🔔 <b>सूचना सेटिंग्स</b>",
-            balanceUpdates: "बैलेंस अपडेट",
-            scriptStatus: "स्क्रिप्ट स्थिति",
-            changeSettings: "इन सेटिंग्स को बदलने के लिए, कृपया सपोर्ट से संपर्क करें।"
-        },
-        transactionHistory: {
-            title: "📅 <b>लेन-देन इतिहास</b>",
-            email: "ईमेल",
-            type: "प्रकार",
-            amount: "राशि",
-            points: "पॉइंट्स",
-            description: "विवरण",
-            noTransactions: "कोई लेन-देन नहीं मिला",
-            date: "दिनांक"
-        },
-        errors: {
-            general: "An error occurred. Please try again later.",
-            invalidCommand: "Invalid command",
-            notAvailable: "This feature is not available yet",
-            databaseError: "Database error occurred",
-            networkError: "Network error occurred"
-        },
-        help: `
-ℹ️ <b>DAWN BOT सहायता केंद्र</b> ℹ️
-━━━━━━━━━━━━━━━━━━━━
-
-<b>📌 उपलब्ध कमांड</b>
-• /start - बॉट शुरू करें और मुख्य मेनू दिखाएं
-
-<b>🔍 मेनू सुविधाएं</b>
-• 📊 <b>खाता जानकारी</b>
-  प्रत्येक खाते की विस्तृत जानकारी देखें:
-  - खाता ईमेल
-  - प्रारंभिक बैलेंस
-  - अर्जित बैलेंस
-  - वर्तमान कुल बैलेंस
-
-• 💰 <b>कुल बैलेंस</b>
-  सभी खातों का कुल बैलेंस दिखाएं
-
-• ✅ <b>स्क्रिप्ट स्थिति</b>
-  स्क्रिप्ट स्थिति देखें:
-  - सक्रिय/निष्क्रिय स्थिति
-  - प्रारंभ समय
-  - चलने की अवधि
-  - अंतिम अपडेट
-
-• 🔔 <b>सूचनाएं</b>
-  सूचनाएं प्रबंधित करें:
-  - बैलेंस अपडेट
-  - स्क्रिप्ट स्थिति अपडेट
-
-• 📅 <b>लेन-देन इतिहास</b>
-  लेन-देन इतिहास देखें:
-  - विवरण
-  - विवरण
-
-<b>💡 सहायता चाहिए?</b>
-यदि आपको अधिक सहायता की आवश्यकता है:
-• Telegram: @itbaarts_dev
-
-━━━━━━━━━━━━━━━━━━━━
-<i>DAWN BOT v1.2.6</i>`,
+        languageMenu: "🌐 <b>Pilihan Bahasa</b>\n\nPilih bahasa nang Pian handaki:",
         about: `
-👤 <b>DAWN BOT के बारे में</b> 👤
+<b>DAWN BOT ${new Date().getFullYear()}</b>
 ━━━━━━━━━━━━━━━━━━━━
 
-<b>🤖 बॉट जानकारी</b>
-• नाम: DAWN BOT
-• संस्करण: 1.0.0
-• डेवलपर: ITBAARTS
-• अंतिम अपडेट: ${new Date().toLocaleDateString()}
+<b>Paparan Sistem</b>
+• Versi: 1.2.6
+• Nang Maulah: ITBAARTS
+• Terakhir Diubah: ${new Date().toLocaleDateString()}
 
-<b>🌟 सुविधाएं</b>
-• रीयल-टाइम बैलेंस ट्रैकिंग
-• मल्टी-अकाउंट प्रबंधन
-• स्वचालित स्क्रिप्ट निगरानी
-• लेन-देन इतिहास
-• अनुकूलन योग्य सूचनाएं
-• सुरक्षित और विश्वसनीय
+<b>Fitur Utama</b>
+• Langsung tahu poin Pian
+• Kawa maurusi banyak akun
+• Bot maambil poin otomatis
+• Aman wan nyaman dipercaya
 
-<b>🛡️ सुरक्षा</b>
-• एंड-टू-एंड एन्क्रिप्शन
-• सुरक्षित प्रमाणीकरण
-• नियमित सुरक्षा अपडेट
-• गोपनीयता सुरक्षा
-
-<b>👨‍💻 डेवलपर संपर्क</b>
-• Telegram: @itbaarts_dev
-
-<b>📢 सोशल मीडिया</b>
-• Telegram चैनल: @UXScript
+<b>Amun Handak Batakun</b>
+• Hubungi: @itbaarts_dev
+• Info Hanyar: @UXScript & @UXPrime
 
 ━━━━━━━━━━━━━━━━━━━━
-<i>ITBAARTS द्वारा ❤️ के साथ विकसित</i>`,
-        languageMenu: "🌐 <b>भाषा चुनें</b>\n\nअपनी पसंदीदा भाषा चुनें:",
-        stats: {
-            title: "📈 <b>Statistik Bot</b>",
-            totalAccounts: "Total Akun",
-            totalTransactions: "Total Transaksi",
-            averageEarnings: "Rata-rata Pendapatan",
-            topEarner: "Akun Terbaik",
-            lastHour: "1 Jam Terakhir",
-            today: "Hari Ini",
-            week: "Minggu Ini"
+<i>Diulah lawan sanang hati ulih ITBAARTS</i>`,
+        errors: {
+            accountInfo: "❌ Gagal mengambil informasi akun",
+            balance: "❌ Gagal mengambil informasi saldo",
+            noAccounts: "❌ Tidak ada akun yang terdaftar",
+            fetch: "❌ Gagal mengambil data"
+        }
+    },
+    jw: {  // Jawa Kromo Inggil
+        welcome: `
+✨ <b>DASHBOARD DAWN BOT</b> ✨
+
+Kula nuwun, sugeng rawuh wonten ing sistem pangatur poin otomatis.
+Mangga dipunpilih menu ing ngandhap punika kangge nglajengaken:`,
+        menuItems: {
+            accountInfo: "📊 Seratan Akun - Ningali seratan akun panjenengan",
+            totalBalance: "💰 Arto - Mirsani gunggung poin",
+            language: "🌐 Basa - Ngewahi basa bot",
+            about: "ℹ️ Babagan - Katerangan bot"
         },
-        settings: {
-            title: "⚙️ <b>Pengaturan Bot</b>",
-            notifications: "Notifikasi",
-            language: "Bahasa",
-            timezone: "Zona Waktu",
-            display: "Tampilan",
-            security: "Keamanan",
-            advanced: "Lanjutan"
+        buttons: {
+            accountInfo: "📊 Seratan Akun",
+            totalBalance: "💰 Gunggung Arto",
+            language: "🌐 Basa",
+            about: "ℹ️ Babagan",
+            back: "← Kondur",
+            refresh: "🔄 Refresh"
+        },
+        accountInfo: {
+            title: "📊 Seratan Akun Panjenengan",
+            email: "Alamat Email",
+            initialBalance: "Arto Wiwitan",
+            earnedBalance: "Arto Dipunpikantuk",
+            totalEarned: "Gunggung Dipunpikantuk",
+            totalBalance: "Arto Sakmenika",
+            lastCollect: "Pungkasan Mendhet",
+            lastUpdate: "Pungkasan Dipunewahi"
+        },
+        totalBalance: {
+            title: "💰 <b>Gunggung Sedaya Arto</b>",
+            total: "Gunggung Arto",
+            earning: "Gunggung Pikantukan",
+            points: "poin",
+            lastUpdate: "Dipunewahi Pungkasan"
+        },
+        languageMenu: "🌐 <b>Pangaturan Basa</b>\n\nMangga dipunpilih basa ingkang panjenengan kersakaken:",
+        about: `
+<b>DAWN BOT ${new Date().getFullYear()}</b>
+━━━━━━━━━━━━━━━━━━━━
+
+<b>Katerangan Sistem</b>
+• Versi: 1.2.6
+• Ingkang Damel: ITBAARTS
+• Dipunewahi Pungkasan: ${new Date().toLocaleDateString()}
+
+<b>Fitur Utami</b>
+• Pantauan poin langsung
+• Pangatur kathah akun
+• Sistem mendhet poin otomatis
+• Terjamin karaharjanipun
+
+<b>Menawi Wonten Pitakenan</b>
+• Pangembang: @itbaarts_dev
+• Pawarta Enggal: @UXScript & @UXPrime
+
+━━━━━━━━━━━━━━━━━━━━
+<i>Dipundamel kanthi raos bingah dening ITBAARTS</i>`,
+        errors: {
+            accountInfo: "❌ Gagal mengambil informasi akun",
+            balance: "❌ Gagal mengambil informasi saldo",
+            noAccounts: "❌ Tidak ada akun yang terdaftar",
+            fetch: "❌ Gagal mengambil data"
         }
     }
 };
